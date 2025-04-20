@@ -12,7 +12,7 @@ def hex2bin(hex_string: str) -> str:
         hex_string = hex_string[2:]
 
     hex_string = hex_string.upper()
-    
+
     mp = {'0': "0000",
 		'1': "0001",
 		'2': "0010",
@@ -34,6 +34,7 @@ def hex2bin(hex_string: str) -> str:
 
     for i in range(len(hex_string)):
         bin = bin + mp[hex_string[i]]
+
     return bin
         
 
@@ -75,10 +76,37 @@ def xor(a: str, b: str) -> str:
         str += '1' if a[i] != b[i] else '0'
     return str
 
-def load_plaintext(filename: str) -> str:
-    """Load the plaintext from a file."""
-    with open(filename, 'r') as f:
-        return f.read()
+def circular_shift_left(key: str, shift: int) -> str:
+    """Circular shift left the key.
+    Args:
+        key (str): The key to shift.
+        shift (int): The number of shifts.
+    Returns:
+        str: The shifted key.
+    """
+    return key[shift:] + key[:shift]
+
+def split_half(key: str) -> tuple[str, str]:
+    """Split the key into two halves. 
+    Args:
+        key (str): The key to split.
+    Returns:
+        tuple[str, str]: The left and right halves of the key.
+    """
+    half = len(key) // 2
+    left = key[:half]
+    right = key[half:]
+    return left, right
+
+def swap_half(left: str, right: str) -> tuple[str, str]:
+    """Swap the two halves of the key.
+    Args:
+        left (str): The left half of the key.
+        right (str): The right half of the key.
+    Returns:
+        tuple[str, str]: The swapped key.
+    """
+    return right, left
 
 def generate_random_string(length: int = 16) -> str:
     """Generate a random string of specified length."""
