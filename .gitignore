@@ -1,3 +1,34 @@
+# MY READ ME
+README.md
+TO_DO.md
+requirements.txt
+.gitignore
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Virtual environments
+venv/
+env/
+.env/
+.conda/
+envs/
+
+# Testing
+.pytest_cache/
+
+# Debug files
+**/src/utils/test_debug.py
+
 # My Markdown files
 **/MYREADME.md
 **/PROMPTS.md
@@ -6,26 +37,13 @@
 # Test files
 **/src/tests    
 
-# Debug files
-**/src/utils/test_debug.py
-
 # Algorithm files
-**/src/algorithms/aes.py
-**/src/algorithms/ecc.py
-**/src/algorithms/sha.py
-**/src/algorithms/rsa.py
-**/src/algorithms/3des.py
-**/src/algorithms/base_.py
-
-# Requirements
-**/requirements.txt
+src/algorithms/aes.py
+/src/algorithms/ecc.py
+/src/algorithms/sha.py
+/src/algorithms/rsa.py
+/src/algorithms/3des.py
+/src/algorithms/base_.py
 
 # Todo
 **/TODO.md
-
-# pytest
-**/.pytest_cache
-
-# conda
-**/envs
-**/.conda

@@ -2,7 +2,7 @@ from Crypto import Cipher, Random
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from typing import Any, Dict, Tuple
-from .base_ import CryptoAlgorithm
+from .base import CryptoAlgorithm
 from ..utils.helpers import pad_data, unpad_data
 
 class AESAlgorithm(CryptoAlgorithm):
