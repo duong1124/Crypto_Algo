@@ -1,8 +1,9 @@
 # MY READ ME
-README.md
 TO_DO.md
 requirements.txt
 .gitignore
+PROMPTS.md
+MYREADME.md
 
 # Python cache and compiled files
 __pycache__/
@@ -29,21 +30,13 @@ envs/
 # Debug files
 **/src/utils/test_debug.py
 
-# My Markdown files
-**/MYREADME.md
-**/PROMPTS.md
-**/README.md
-
 # Test files
 **/src/tests    
 
 # Algorithm files
-src/algorithms/aes.py
-/src/algorithms/ecc.py
-/src/algorithms/sha.py
-/src/algorithms/rsa.py
-/src/algorithms/3des.py
-/src/algorithms/base_.py
-
-# Todo
-**/TODO.md
+**/src/algorithms/aes.py
+**/src/algorithms/ecc.py
+**/src/algorithms/sha.py
+**/src/algorithms/rsa.py
+**/src/algorithms/3des.py
+**/src/algorithms/base_.py
