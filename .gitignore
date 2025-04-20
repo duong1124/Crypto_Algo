@@ -1,10 +1,31 @@
+# My Markdown files
 **/MYREADME.md
 **/PROMPTS.md
+**/README.md
 
-**/src/tests
+# Test files
+**/src/tests    
 
+# Debug files
+**/src/utils/test_debug.py
+
+# Algorithm files
+**/src/algorithms/aes.py
 **/src/algorithms/ecc.py
 **/src/algorithms/sha.py
 **/src/algorithms/rsa.py
+**/src/algorithms/3des.py
+**/src/algorithms/base_.py
 
+# Requirements
+**/requirements.txt
 
+# Todo
+**/TODO.md
+
+# pytest
+**/.pytest_cache
+
+# conda
+**/envs
+**/.conda

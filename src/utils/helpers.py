@@ -5,6 +5,80 @@ from typing import Union, List, Dict
 import numpy as np
 import matplotlib.pyplot as plt
 
+def hex2bin(hex_string: str) -> str:
+    """Convert a hex string to a binary string without 0b."""
+    # return bin(int(hex_string, 16))[2:]
+    if hex_string.startswith('0x'):
+        hex_string = hex_string[2:]
+
+    hex_string = hex_string.upper()
+    
+    mp = {'0': "0000",
+		'1': "0001",
+		'2': "0010",
+		'3': "0011",
+		'4': "0100",
+		'5': "0101",
+		'6': "0110",
+		'7': "0111",
+		'8': "1000",
+		'9': "1001",
+		'A': "1010",
+		'B': "1011",
+		'C': "1100",
+		'D': "1101",
+		'E': "1110",
+		'F': "1111"}
+
+    bin = ""
+
+    for i in range(len(hex_string)):
+        bin = bin + mp[hex_string[i]]
+    return bin
+        
+
+def bin2hex(bin_string: str) -> str:
+    """Convert a binary string to a hex string without 0x."""
+    if bin_string.startswith('0b'):
+        bin_string = bin_string[2:]
+    return hex(int(bin_string, 2))[2:]
+
+def bin2dec(bin_string: str) -> int:
+    """Convert a binary string to a decimal integer."""
+    if bin_string.startswith('0b'):
+        bin_string = bin_string[2:]
+    return int(bin_string, 2)
+
+def dec2bin(dec_int) -> str:
+    """Convert a decimal integer to a binary string with length multiple of 4."""
+    if isinstance(dec_int, str):
+        dec_int = int(dec_int, 10)
+    bin_str = bin(dec_int)[2:]  # remove '0b'
+    # Pad with zeros to make length a multiple of 4
+    padded_len = len(str(dec_int)) * 4
+    return bin_str.zfill(padded_len)
+
+def hex2dec(hex_string: str) -> int:
+    """Convert a hex string to a decimal integer."""
+    if hex_string.startswith('0x'):
+        hex_string = hex_string[2:]
+    return int(hex_string, 16)
+
+def dec2hex(dec_int: int) -> str:
+    """Convert a decimal integer to a hex string without 0x."""
+    return hex(dec_int)[2:].upper()
+
+def xor(a: str, b: str) -> str:
+    """XOR two strings."""
+    str = ""
+    for i in range(len(a)):
+        str += '1' if a[i] != b[i] else '0'
+    return str
+
+def load_plaintext(filename: str) -> str:
+    """Load the plaintext from a file."""
+    with open(filename, 'r') as f:
+        return f.read()
 
 def generate_random_string(length: int = 16) -> str:
     """Generate a random string of specified length."""
