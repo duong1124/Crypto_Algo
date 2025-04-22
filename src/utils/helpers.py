@@ -42,7 +42,7 @@ def bin2hex(bin_string: str) -> str:
     """Convert a binary string to a hex string without 0x."""
     if bin_string.startswith('0b'):
         bin_string = bin_string[2:]
-    return hex(int(bin_string, 2))[2:]
+    return hex(int(bin_string, 2))[2:].upper()
 
 def bin2dec(bin_string: str) -> int:
     """Convert a binary string to a decimal integer."""
@@ -50,14 +50,14 @@ def bin2dec(bin_string: str) -> int:
         bin_string = bin_string[2:]
     return int(bin_string, 2)
 
-def dec2bin(dec_int) -> str:
-    """Convert a decimal integer to a binary string with length multiple of 4."""
+def dec2bin(dec_int: int, size: int = None) -> str:
+    """Convert a decimal integer to a binary string with fixed length."""
     if isinstance(dec_int, str):
         dec_int = int(dec_int, 10)
     bin_str = bin(dec_int)[2:]  # remove '0b'
-    # Pad with zeros to make length a multiple of 4
-    padded_len = len(str(dec_int)) * 4
-    return bin_str.zfill(padded_len)
+    if size is not None:
+        return bin_str.zfill(size)
+    return bin_str
 
 def hex2dec(hex_string: str) -> int:
     """Convert a hex string to a decimal integer."""

@@ -6,9 +6,9 @@ plaintext = "123456ABCD132536"
 plaintext = hex2bin(plaintext)
 
 key = "AABB09182736CCDD"
-keyb = bin2hex(key)
+keyb = hex2bin(key)
 
 des = DES()
-ciphertext = des.encrypt(plaintext, keyb)
-print(f"Ciphertext: {ciphertext}")
-decrypted_text = des.decrypt(ciphertext, keyb)
+ciphertext = des.encrypt(plaintext, keyb, print_key_round=True)
+print(f"Ciphertext: {bin2hex(ciphertext)}")
+# decrypted_text = des.decrypt(ciphertext, keyb)
