@@ -7,7 +7,7 @@ class DES(CryptoAlgorithm):
         super().__init__()
         self.key_size = key_size
 
-    def encrypt(self, plaintext: str, key: str) -> str:
+    def encrypt(self, plaintext: str, key: str, print_round_text = None) -> str:
         """Encrypt the plaintext using the DES algorithm.
         Args:
             plaintext (str): The plaintext to encrypt (64 bits)
@@ -25,6 +25,8 @@ class DES(CryptoAlgorithm):
             left, right = des_mixer(left, right, keys[round])
             if round != 15:
                 left, right = swap_half(left, right)
+            if print_round_text:
+                print(f"Round {round + 1}: L: {bin2hex(left)}, R: {bin2hex(right)}, Key: {bin2hex(keys[round])}")
 
         combined = des_combine(left, right)
         permuted_ciphertext = des_permute(combined, des_final_permutation, 64)

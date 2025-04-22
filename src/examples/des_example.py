@@ -9,6 +9,6 @@ key = "AABB09182736CCDD"
 keyb = hex2bin(key)
 
 des = DES()
-ciphertext = des.encrypt(plaintext, keyb, print_key_round=True)
+ciphertext = des.encrypt(plaintext, keyb, print_round_text=True)
 print(f"Ciphertext: {bin2hex(ciphertext)}")
 # decrypted_text = des.decrypt(ciphertext, keyb)
