@@ -42,7 +42,9 @@ def bin2hex(bin_string: str) -> str:
     """Convert a binary string to a hex string without 0x."""
     if bin_string.startswith('0b'):
         bin_string = bin_string[2:]
-    return hex(int(bin_string, 2))[2:].upper()
+    res = hex(int(bin_string, 2))[2:].upper()
+    res = res.zfill(len(bin_string) // 4)
+    return res
 
 def bin2dec(bin_string: str) -> int:
     """Convert a binary string to a decimal integer."""
