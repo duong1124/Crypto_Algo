@@ -8,8 +8,9 @@ plaintext = "123456ABCD132536"
 plaintext = hex2bin(plaintext)
 
 k1 = 'AABB09182736CCDD'
-k2 = '2B77956B9B3E7E12'
-k3 = '4A14508D5D44767A'
+# Randomly mutate the key from k1 using a seed value
+k2 = tdes.mutate_key(k1, seed = 1)
+k3 = tdes.mutate_key(k1, seed = 2) 
 
 k1b = hex2bin(k1)
 k2b = hex2bin(k2)

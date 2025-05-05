@@ -2,11 +2,24 @@ from utils.des_helpers import *
 from utils.helpers import *
 from algorithms.base import CryptoAlgorithm
 from algorithms.des import DES
-
+import hashlib
 class TripleDES(CryptoAlgorithm):
     def __init__(self):
         super().__init__()
         self.des = DES()
+
+    def mutate_key(self, original_key: str, seed: int) -> str:
+        """
+        Mutate the original key using a seed value.
+        Args:
+            original_key (str): The original key to mutate (56 bits)
+            seed (int): The seed value to use for mutation
+        Returns:
+            str: The mutated key (56 bits)
+        """
+        data = original_key + str(seed)
+        hashed = hashlib.md5(data.encode()).hexdigest().upper()
+        return hashed[:16]  # Return the first 16 characters of the hash
 
     def encrypt(self, plaintext: str, k1: str, k2: str, k3: str = None, print_round_text=False) -> str:
         """
