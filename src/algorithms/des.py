@@ -39,6 +39,7 @@ class DES(CryptoAlgorithm):
         Args:
             ciphertext (str): The ciphertext to decrypt (64 bits)
             key (str): The key to decrypt the ciphertext with (56 bits)
+            print_round_text (bool): If True, print the round text for each round
         Returns:
             str: The decrypted plaintext (64 bits)
         """
@@ -59,4 +60,3 @@ class DES(CryptoAlgorithm):
         combined = des_combine(left, right)
         permuted_plaintext = des_permute(combined, des_final_permutation, 64)
         return permuted_plaintext
-        #pass # TODO: Implement the decryption function
