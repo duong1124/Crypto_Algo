@@ -34,7 +34,6 @@ envs/
 **/src/tests    
 
 # Algorithm files
-**/src/algorithms/aes.py
 **/src/algorithms/ecc.py
 **/src/algorithms/sha.py
 **/src/algorithms/rsa_.py
