@@ -205,7 +205,14 @@ def shift_row(state, nbr):
 
 
 def add_round_key(state, round_key):
-    """XOR the state with the round key"""
+    """
+    XOR the state with the round key.
+    Args: 
+        state (bytearray): 16-byte.
+        round_key (bytearray): 16-byte.
+    Returns:
+        bytearray: The state after XOR with round key.
+    """
     for i in range(16):
         state[i] ^= round_key[i]
     return state

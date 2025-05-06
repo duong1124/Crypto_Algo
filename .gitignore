@@ -37,4 +37,5 @@ envs/
 **/src/algorithms/ecc.py
 **/src/algorithms/sha.py
 **/src/algorithms/rsa_.py
+**/src/algorithms/ecc_.py
 **/src/algorithms/base_.py
