@@ -4,6 +4,7 @@ import string
 from typing import Union, List, Dict
 import numpy as np
 import matplotlib.pyplot as plt
+MAX_64BIT = 0xffffffffffffffff
 
 def hex2bin(hex_string: str) -> str:
     """Convert a hex string to a binary string without 0b."""
@@ -167,3 +168,9 @@ def load_metrics_from_file(filename: str) -> Dict[str, float]:
             key, value = line.strip().split(': ')
             metrics[key] = float(value)
     return metrics 
+
+def rotate_right(n, r):
+    return ((n >> r) | (n << (64 - r))) & MAX_64BIT
+
+def shift_left(n, r):
+    return n << r
