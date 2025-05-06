@@ -1,7 +1,19 @@
 """
 Utility functions for the cryptography project.
 """ 
+# conversion functions
+from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex
 
-from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex, split_half, circular_shift_left, generate_random_string, pad_data, unpad_data
+# split and shift functions
+from .helpers import split_half, circular_shift_left
+
+# math functions
+from .helpers import xor, gcd, is_prime, multiplicative_inverse, advanceMod
+
+# prime generation functions
+from .helpers import generate_prime_pair, miller_rabin_prime
+
+
+from .metric_plot import plot_performance_metrics, save_metrics_to_file, load_metrics_from_file
 from .des_helpers import *
 from .sha512_helpers import *
