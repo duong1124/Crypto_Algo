@@ -16,3 +16,4 @@ from .helpers import generate_prime_pair, miller_rabin_prime
 
 from .metric_plot import plot_performance_metrics, save_metrics_to_file, load_metrics_from_file
 from .des_helpers import *
+from .ecc_helpers import mod_inverse, extended_gcd, FieldElementGFp, EllipticCurveGFp, FieldElementGF2n, EllipticCurveGF2n 
