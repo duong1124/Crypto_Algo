@@ -31,7 +31,10 @@ envs/
 **/src/utils/test_debug.py
 
 # Test files
-**/src/tests    
+**/src/tests/test_aes.py
+**/src/tests/test_ecc_.py
+**/src/tests/test_rsa.py
+**/src/tests/test_sha.py    
 
 # Algorithm files
 **/src/algorithms/sha_.py
