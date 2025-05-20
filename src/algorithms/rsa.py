@@ -47,7 +47,7 @@ class RSA(CryptoAlgorithm):
         encrypted = []
         for char in msg:
             pt = ord(char) - 96  # 'a' = 1, ..., 'z' = 26
-            ct = advanceMod(pt, e, n)
+            ct = advanceMod_SM(pt, e, n)
             encrypted.append(ct + 96)  # Chuyển lại thành mã ASCII
         if text:
             encrypted = ''.join(map(lambda x: chr(x), encrypted))
@@ -69,7 +69,7 @@ class RSA(CryptoAlgorithm):
             
         for ct in cipher:
             temp = ct - 96  # encrypted value, should be in range 1-26
-            pt = advanceMod(temp, d, n)
+            pt = advanceMod_SM(temp, d, n)
             decrypted.append(pt + 96)  # Trả lại thành chữ cái
         if text:
             decrypted = ''.join(map(lambda x: chr(x), decrypted))

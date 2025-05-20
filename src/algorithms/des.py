@@ -7,7 +7,7 @@ class DES(CryptoAlgorithm):
         super().__init__()
         self.key_size = key_size
 
-    def encrypt(self, plaintext: str, key: str, print_round_text = False) -> str:
+    def encrypt(self, plaintext: str, key: str, print_round_text = False, print_initial_permutation = False) -> str:
         """Encrypt the plaintext using the DES algorithm.
         Args:
             plaintext (str): The plaintext to encrypt (64 bits)
@@ -17,7 +17,8 @@ class DES(CryptoAlgorithm):
             str: The encrypted ciphertext (64 bits)
         """
         permuted_plaintext = des_permute(plaintext, des_initial_permutation, 64)
-        print(f"After initial permutation: {bin2hex(permuted_plaintext)}")
+        if print_initial_permutation:
+            print(f"After initial permutation: {bin2hex(permuted_plaintext)}")
         left, right = split_half(permuted_plaintext)
 
         # Generate the 16 keys for each round   
@@ -34,7 +35,7 @@ class DES(CryptoAlgorithm):
         permuted_ciphertext = des_permute(combined, des_final_permutation, 64)
         return permuted_ciphertext
     
-    def decrypt(self, ciphertext: str, key: str, print_round_text = False) -> str:
+    def decrypt(self, ciphertext: str, key: str, print_round_text = False, print_initial_permutation = False) -> str:
         """Decrypt the ciphertext using the DES algorithm.
         Args:
             ciphertext (str): The ciphertext to decrypt (64 bits)
@@ -44,7 +45,8 @@ class DES(CryptoAlgorithm):
             str: The decrypted plaintext (64 bits)
         """
         permuted_ciphertext = des_permute(ciphertext, des_initial_permutation, 64)
-        print(f"After initial permutation: {bin2hex(permuted_ciphertext)}")
+        if print_initial_permutation:
+            print(f"After initial permutation: {bin2hex(permuted_ciphertext)}")
         left, right = split_half(permuted_ciphertext)
 
         # Generate the 16 keys for each round
