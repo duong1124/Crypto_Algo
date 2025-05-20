@@ -1,9 +1,6 @@
 # MY READ ME
-TO_DO.md
 requirements.txt
 .gitignore
-PROMPTS.md
-MYREADME.md
 
 # Python cache and compiled files
 __pycache__/
