@@ -79,6 +79,14 @@ def dec2hex(dec_int: int) -> str:
     """Convert a decimal integer to a hex string without 0x."""
     return hex(dec_int)[2:].upper()
 
+def text_to_binary(text: str) -> str:
+    """Convert a text string to a binary string."""
+    return ''.join(format(ord(char), '08b') for char in text)
+
+def binary_to_text(binary: str) -> str:
+    """Convert a binary string to a text string."""
+    return ''.join(chr(int(binary[i:i+8], 2)) for i in range(0, len(binary), 8))
+
 def xor(a: str, b: str) -> str:
     """XOR two strings."""
     str = ""
@@ -162,6 +170,7 @@ def binary_gcd(a, b):
     # Dividing a by 2 until a becomes odd
     while ((a & 1) == 0):
         a = a >> 1
+
     while(b != 0):
 
         # If b is even, remove all
@@ -193,7 +202,7 @@ def gcd(a, b):
 
 def advanceMod(a, b, c):
     '''
-    Calculate a^b mod c using modular exponentiation.
+    Calculate a^b mod c using modular exponentiation (LSB to MSB).
     Args:
         a (int): The base.
         b (int): The exponent.
@@ -209,6 +218,26 @@ def advanceMod(a, b, c):
             result = (result * a) % c
         b //= 2
         a = (a * a) % c
+
+    return result
+
+def advanceMod_SM(a, b, c):
+    '''
+    Calculate a^b mod c using square-and-multiply algorithm in class (MSB to LSB).
+    Args:
+        a (int): The base.
+        b (int): The exponent.
+        c (int): The modulus.
+    Returns:
+        int: a^b mod c.
+    '''
+    bits = bin(b)[2:]
+    result = 1
+
+    for bit in bits:
+        result = (result * result) % c
+        if bit == '1':
+            result = (result * a) % c
 
     return result
 

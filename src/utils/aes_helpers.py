@@ -68,7 +68,13 @@ SIZE_24 = 24
 SIZE_32 = 32
 
 def byte_to_state(block: bytearray) -> bytearray:
-    """Convert 16-byte input into 4x4 AES column-major state"""
+    """
+    Convert 16-byte input into 4x4 AES column-major state.
+    Args:
+        block (bytearray): 16-byte input.
+    Returns:
+        bytearray: 4x4 AES column-major state.
+    """
     state = bytearray(16)
     for row in range(4):
         for col in range(4):
@@ -76,7 +82,13 @@ def byte_to_state(block: bytearray) -> bytearray:
     return state
 
 def state_to_byte(state: bytearray) -> bytearray:
-    """Convert AES column-major state back to 16-byte output"""
+    """
+    Convert AES column-major state back to 16-byte output.
+    Args:
+        state (bytearray): 4x4 AES column-major state.
+    Returns:
+        bytearray: 16-byte output.
+    """
     block = bytearray(16)
     for row in range(4):
         for col in range(4):
@@ -96,11 +108,11 @@ def get_sbox_invert(num):
 
 def rotate(word):
     """
-    Rotate the word eight bits to the left
-    
-    rotate(1d2c3a4f) = 2c3a4f1d
-    
-    word is an byte array of size 4 (32 bit)
+    Rotate the word eight bits to the left ( rotate(1d2c3a4f) = 2c3a4f1d )
+    Args:
+        word (bytearray): 4-byte word.
+    Returns:
+        bytearray: Rotated word.
     """
     #c = word[0]
     #for i in range(3):
@@ -133,10 +145,12 @@ def core(word, iteration):
 def expand_key(key, key_size, expanded_key_size):
     """
     Expands an 128,192,256 key into an 176,208,240 bytes key
-    
-    key: array of bytes
-    key_size: size of the key in bytes (16, 24, or 32)
-    expanded_key_size: size of the expanded key in bytes
+    Args:
+        key (bytearray): The key to expand.
+        key_size (int): The size of the key in bytes (16, 24, or 32).
+        expanded_key_size (int): The size of the expanded key in bytes (176, 208, or 240).
+    Returns:
+        bytearray: The expanded key with expanded size.
     """
     expanded_key = bytearray(expanded_key_size)
     current_size = 0
@@ -183,25 +197,31 @@ def sub_bytes(state):
 
 
 def shift_rows(state):
-    """Iterate over the 4 rows and call shift_row() with that row"""
+    """
+    Iterate over the 4 rows and call shift_row() on each.
+    Args:  
+        state (bytearray): 4x4 AES column-major state.
+    Returns:
+        bytearray: The state after shifting rows. 
+    """
     for i in range(4):
         state = shift_row(state, i)
     return state
 
 
-def shift_row(state, nbr):
+def shift_row(state_row, nbr):
     """
-    Each iteration shifts the row to the left by 1
-    
-    state is a 16-byte array representing 4x4 matrix
-    nbr is the row number (0-based)
+    Shift a specific row to the left by nbr bytes.
+    Args:
+        state_row (bytearray): 4-byte row.
+        nbr (int): The row number (0-based).
     """
     for i in range(nbr):
-        tmp = state[nbr * 4]
+        tmp = state_row[nbr * 4]
         for j in range(3):
-            state[nbr * 4 + j] = state[nbr * 4 + j + 1]
-        state[nbr * 4 + 3] = tmp
-    return state
+            state_row[nbr * 4 + j] = state_row[nbr * 4 + j + 1]
+        state_row[nbr * 4 + 3] = tmp
+    return state_row
 
 
 def add_round_key(state, round_key):
@@ -220,6 +240,7 @@ def add_round_key(state, round_key):
 def galois_multiplication(a, b):
     """Galois multiplication of 8-bit characters a and b"""
     p = 0
+    
     for counter in range(8):
         if (b & 1) != 0:
             p ^= a

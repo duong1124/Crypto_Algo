@@ -2,13 +2,13 @@
 Utility functions for the cryptography project.
 """ 
 # conversion functions
-from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex
+from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex, text_to_binary, binary_to_text
 
 # split and shift functions
 from .helpers import split_half, circular_shift_left
 
 # math functions
-from .helpers import xor, gcd, is_prime, multiplicative_inverse, advanceMod
+from .helpers import xor, gcd,  binary_gcd, is_prime, multiplicative_inverse, advanceMod, advanceMod_SM
 
 # prime generation functions
 from .helpers import generate_prime_pair, miller_rabin_prime
