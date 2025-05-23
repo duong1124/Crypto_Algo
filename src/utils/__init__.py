@@ -2,7 +2,7 @@
 Utility functions for the cryptography project.
 """ 
 # conversion functions
-from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex, text_to_binary, binary_to_text
+from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex, text_to_binary, binary_to_text, text_to_z26, z26_to_char
 
 # split and shift functions
 from .helpers import split_half, circular_shift_left

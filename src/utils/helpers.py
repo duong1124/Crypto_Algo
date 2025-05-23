@@ -262,15 +262,12 @@ def multiplicative_inverse(e, t):
     return t0 % t
 
 
-def generate_prime_pair(bit_size):
-    """
-    Generate two different prime numbers of specified bit size
-    
-    Parameters:
-    bit_size (int): The bit size of the primes to generate
-    
+def generate_prime_pair(bit_size = 32):
+    """Generate two different prime numbers of specified bit size
+    Args:
+        bit_size (int): The bit size of the primes to generate, default = 32.
     Returns:
-    tuple: (p, q) - Two different prime numbers
+        tuple: (p, q) - Two different prime numbers
     """
     # Generate first prime
     p = sympy.randprime(2**(bit_size-1), 2**bit_size)
@@ -283,10 +280,9 @@ def generate_prime_pair(bit_size):
     return p, q
     
 def miller_rabin_prime(bit_size, k=40):
-    """
-    Generate a prime number of specified bit size using Miller-Rabin test
+    """Generate a prime number of specified bit size using Miller-Rabin test
     
-    Parameters:
+    Args:
     bit_size (int): The bit size of the prime to generate
     k (int): Number of iterations for Miller-Rabin test
     
@@ -327,7 +323,33 @@ def miller_rabin_prime(bit_size, k=40):
         p = (1 << (bit_size - 1)) | random.getrandbits(bit_size - 2) | 1
         if is_probably_prime(p, k):
             return p
-            
+
+def z26_to_char(num: int) -> str:
+    """Convert a number in Z_26 group (0 - 25) to its corresponding character.
+    Args:
+        num (int)
+    Returns:
+        str
+    """
+    if 0 <= num < 26:
+        return chr(num + 97)  # 'a' is ASCII 97
+    else:
+        raise ValueError("Number must be in the range [0, 25]")
+
+def text_to_z26(text: str, one_at_a_time: bool = True):
+    """Convert text to Z_26 group representation (0 - 25).
+    Args:
+        text (str): The text to convert.
+        one_at_a_time (bool): If True, convert one character at a time and return a list. Else, return a single integer after concat.
+    Returns:
+        int or list: The Z_26 representation of the text.
+    """
+    if one_at_a_time:
+        return [ord(char) - 97 for char in text] 
+    else:
+        num_str = ''.join([f"{ord(char) - 97:02d}" for char in text.lower()]) # zeropad each converted char to 2 digits
+        return int(num_str)
+    
 def generate_random_string(length: int = 16) -> str:
     """Generate a random string of specified length."""
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))

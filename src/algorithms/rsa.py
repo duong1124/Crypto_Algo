@@ -15,7 +15,7 @@ class RSA(CryptoAlgorithm):
         """
 
         if not (sympy.isprime(p) and sympy.isprime(q)) or p == q:
-            print("Both numbers must be prime and different.")
+            print("Both numbers must be seperated primes.")
             return None, None
 
         n = p * q
@@ -34,43 +34,64 @@ class RSA(CryptoAlgorithm):
 
         return public_key, private_key
 
-    def encrypt(self, msg, public_key, text = False):
+    def encrypt(self, msg, public_key, text = False, one_at_a_time = True):
         """Encrypt a message using the RSA algorithm.
         Args:
             msg (str): The message to encrypt.
             public_key (tuple): The public key (e, n).
             text (bool): If True, return the encrypted message as a string.
+            one_at_a_time (bool): If True, encrypt one character at a time.
         Returns:
-            str or list: The encrypted message as a string or a list of integers.
+            int or list: list of int if one_at_a_time, else int.
         """
         e, n = public_key
-        encrypted = []
-        for char in msg:
-            pt = ord(char) - 96  # 'a' = 1, ..., 'z' = 26
-            ct = advanceMod_SM(pt, e, n)
-            encrypted.append(ct + 96)  # Chuyển lại thành mã ASCII
-        if text:
-            encrypted = ''.join(map(lambda x: chr(x), encrypted))
-        return encrypted
 
+        pt = text_to_z26(msg, one_at_a_time=one_at_a_time)
+
+        if isinstance(pt, List):
+            encrypted = [advanceMod_SM(num, e, n) for num in pt]
+        elif isinstance(pt, int):
+            encrypted = advanceMod_SM(pt, e, n)
+        else:
+            raise ValueError("Invalid plaintext format. Expected int or list of int.")
+        
+        return encrypted
+    
     def decrypt(self, cipher, private_key, text = False):
         """Decrypt a message using the RSA algorithm.
         Args:
-            ciphertext (str or list): The ciphertext to decrypt.
+            ciphertext (int or list): The ciphertext to decrypt.
             private_key (tuple): The private key (d, n).
             text (bool): If True, return the decrypted message as a string.
+            one_at_a_time (bool): If True, decrypt one character at a time. If False,
         Returns:
             str or list: The decrypted message as a string or a list of integers.
         """
         d, n = private_key
         decrypted = []
-        if isinstance(cipher, str):
-            cipher = [ord(char) for char in cipher]
+
+        if isinstance(cipher, list):
+            decrypted = []
+            for ct in cipher:
+                pt = advanceMod_SM(ct, d, n)
+                decrypted.append(pt)
+            if text:
+                decrypted = ''.join(map(lambda x: z26_to_char(x), decrypted))
+
+        elif isinstance(cipher, int):
+            pt_int = advanceMod_SM(cipher, d, n)
+            pt_numerical_str = str(pt_int)
+
+            if len(pt_numerical_str) % 2 != 0:
+                pt_numerical_str = pt_numerical_str.zfill(len(pt_numerical_str) + 1) # pad with 0
+
+            for i in range(0, len(pt_numerical_str), 2):
+                temp = int(''.join([pt_numerical_str[i], pt_numerical_str[i+1]]))
+                decrypted.append(temp)
             
-        for ct in cipher:
-            temp = ct - 96  # encrypted value, should be in range 1-26
-            pt = advanceMod_SM(temp, d, n)
-            decrypted.append(pt + 96)  # Trả lại thành chữ cái
-        if text:
-            decrypted = ''.join(map(lambda x: chr(x), decrypted))
+            decrypted = ''.join(map(lambda x: z26_to_char(x), decrypted))
+        
+        else:
+            raise ValueError("Invalid ciphertext format. Expected int or list of int.")
+
         return decrypted
