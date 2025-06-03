@@ -38,11 +38,3 @@ envs/
 **/src/algorithms/rsa_.py
 **/src/algorithms/ecc_.py
 **/src/algorithms/base_.py
-
-# Example files
-**/src/examples/des_example.py
-**/src/examples/tripledes_example.py
-**/src/examples/aes_example.py
-**/src/examples/rsa_example.py
-**/src/examples/ecc_example.py
-**/src/examples/sha512_example.py
