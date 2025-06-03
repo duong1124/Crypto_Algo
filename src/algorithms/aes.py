@@ -8,6 +8,7 @@ class AES(CryptoAlgorithm):
     #def __init__(self, key_size: int = 128?):
     def __init__(self):
         super().__init__()
+        self.modified_aes_512 = False  # Flag to indicate if AES-512 is used
 
     def encrypt(input_bytes: bytearray, key: bytearray, key_size: int) -> bytearray:
         """Encrypt a 16-byte block with AES using the given key."""
