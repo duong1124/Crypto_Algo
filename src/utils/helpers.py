@@ -129,6 +129,12 @@ def swap_half(left: str, right: str) -> tuple[str, str]:
     """
     return right, left
 
+def rotate_right(n, r):
+    return ((n >> r) | (n << (64 - r))) & MAX_64BIT
+
+def shift_left(n, r):
+    return n << r
+
 def is_prime(n):
     """
     Check if a number is prime.
@@ -349,7 +355,22 @@ def text_to_z26(text: str, one_at_a_time: bool = True):
     else:
         num_str = ''.join([f"{ord(char) - 97:02d}" for char in text.lower()]) # zeropad each converted char to 2 digits
         return int(num_str)
-    
+
+def whirlpool_pad(message: bytes) -> bytes:
+    """
+    Pad message for Whirlpool hash:
+      Append a single '1' bit, then '0' bits to make length ≡ 256 mod 512,
+      then append 256-bit (32 bytes) length field.
+    """
+    ml = len(message) * 8  # message length in bits
+    # Append '1' bit (0x80), then as many '0' bits as needed
+    pad = b'\x80'
+    pad_len = (512 - ((ml + 8 + 256) % 512)) % 512  # bits to next 256 mod 512, minus 8 bits for 0x80
+    pad += b'\x00' * ((pad_len // 8))
+    # Append 256-bit length (32 bytes, big-endian)
+    length_field = ml.to_bytes(32, byteorder='big')
+    return message + pad + length_field
+
 def generate_random_string(length: int = 16) -> str:
     """Generate a random string of specified length."""
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
@@ -409,9 +430,3 @@ def load_metrics_from_file(filename: str) -> Dict[str, float]:
             key, value = line.strip().split(': ')
             metrics[key] = float(value)
     return metrics 
-
-def rotate_right(n, r):
-    return ((n >> r) | (n << (64 - r))) & MAX_64BIT
-
-def shift_left(n, r):
-    return n << r

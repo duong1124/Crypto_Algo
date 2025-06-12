@@ -13,7 +13,8 @@ from .helpers import xor, gcd,  binary_gcd, is_prime, multiplicative_inverse, ad
 # prime generation functions
 from .helpers import generate_prime_pair, miller_rabin_prime
 
-
 from .metric_plot import plot_performance_metrics, save_metrics_to_file, load_metrics_from_file
+
+from .helpers import whirlpool_pad
 from .des_helpers import *
 from .sha512_helpers import *

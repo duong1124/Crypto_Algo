@@ -198,24 +198,27 @@ class AES_Helpers:
             result[i] = val
         return result
     
-    @staticmethod
-    def inv_mix_column(column):
-        """
-        Mix a single column in the inverse direction using the InvMixColumns matrix (C^-1)
-        Args:
-            column (bytearray): 4-byte column
-        Returns:
-            bytearray: The mixed column
-        """
-        result = bytearray(4)
+    def mix_columns(self, state):
+        """Iterate over the 4 columns and call mix_column() on each"""
+        column = bytearray(4)
+        
+        # Iterate over the 4 columns
         for i in range(4):
-            val = 0
+            # Construct one column by iterating over the 4 rows
             for j in range(4):
-                val ^= galois_multiplication_GF8(column[j], INV_MIX_COLUMNS_MATRIX[i][j])
-            result[i] = val
-        return result
+                column[j] = state[j * 4 + i]
+            
+            # Apply the mix_column on one column
+            column = self.mix_column(column)
+            
+            # Put the values back into the state
+            for j in range(4):
+                state[j * 4 + i] = column[j]
+                
+        return state
 
-    def mix_row(column):
+    @staticmethod
+    def mix_row(row):
         """
         Mix a single row using the MixRows matrix
         Args:
@@ -227,12 +230,27 @@ class AES_Helpers:
         for i in range(8):
             val = 0
             for j in range(8):
-                val ^= galois_multiplication_GF8(column[j], MIX_ROWS_MATRIX[i][j], modulus=0x11D) # 0x11D for AES-512
+                val ^= galois_multiplication_GF8(row[j], MIX_ROWS_MATRIX[i][j], modulus=0x11D) # 0x11D for AES-512
             result[i] = val
         return result
     
-    def mix_rows():
-        pass
+    def mix_rows(self, state):
+        row = bytearray(8)
+
+        # Iterate over the 8 rows
+        for i in range(8):
+            # Construct one row by iterating over 8 cols
+            for j in range(8):
+                row[j] = state[j * 8 + i]
+
+            # Then apply the mix_row on one row
+            row = self.mix_row(row)
+
+            # Put the value back into the state
+            for j in range(8):
+                state[j * 8 + i] = row[j]
+        
+        return state
 
     @staticmethod
     def create_round_key(expanded_key, round_key_pointer):
@@ -254,12 +272,6 @@ class AES_Helpers:
             state[i] = aes_rsbox[state[i]]
         return state
 
-    def inv_shift_rows(self, state):
-        """Apply the inverse ShiftRows transformation"""
-        for i in range(4):
-            state = self.inv_shift_row(state, i)
-        return state
-
     @staticmethod
     def inv_shift_row(state, nbr):
         """
@@ -274,26 +286,30 @@ class AES_Helpers:
                 state[nbr * 4 + j] = state[nbr * 4 + j - 1]
             state[nbr * 4] = tmp
         return state
-
-    def mix_columns(self, state):
-        """Iterate over the 4 columns and call mix_column() on each"""
-        column = bytearray(4)
-        
-        # Iterate over the 4 columns
+    
+    def inv_shift_rows(self, state):
+        """Apply the inverse ShiftRows transformation"""
         for i in range(4):
-            # Construct one column by iterating over the 4 rows
-            for j in range(4):
-                column[j] = state[j * 4 + i]
-            
-            # Apply the mix_column on one column
-            column = self.mix_column(column)
-            
-            # Put the values back into the state
-            for j in range(4):
-                state[j * 4 + i] = column[j]
-                
+            state = self.inv_shift_row(state, i)
         return state
 
+    @staticmethod
+    def inv_mix_column(column):
+        """
+        Mix a single column in the inverse direction using the InvMixColumns matrix (C^-1)
+        Args:
+            column (bytearray): 4-byte column
+        Returns:
+            bytearray: The mixed column
+        """
+        result = bytearray(4)
+        for i in range(4):
+            val = 0
+            for j in range(4):
+                val ^= galois_multiplication_GF8(column[j], INV_MIX_COLUMNS_MATRIX[i][j])
+            result[i] = val
+        return result
+    
     def inv_mix_columns(self, state):
         """Apply the inverse MixColumns transformation"""
         column = bytearray(4)
