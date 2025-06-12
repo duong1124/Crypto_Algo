@@ -69,7 +69,7 @@ class BruteForceAttack():
         plaintext, original_key, ciphertext = self.generate_test_case()
         print(f"Plaintext: {plaintext}")
         print(f"Original Key: {original_key}")
-        print(f"Ciphertext:\nAs binary {ciphertext}\nAs hexa{bin2hex(ciphertext)}")
+        print(f"Ciphertext:\nAs binary: {ciphertext}\nAs hexa: {bin2hex(ciphertext)}")
         print(f"\nStarting brute force attack with {max_attempts} attempts...")
         found_key = self._brute_force_attack(ciphertext, plaintext, max_attempts=max_attempts)
         if found_key:
