@@ -8,7 +8,7 @@ from .helpers import hex2bin, bin2hex, bin2dec, dec2bin, hex2dec, dec2hex, text_
 from .helpers import split_half, circular_shift_left
 
 # math functions
-from .helpers import xor, gcd,  binary_gcd, is_prime, multiplicative_inverse, advanceMod, advanceMod_SM
+from .helpers import xor, gcd,  binary_gcd, is_prime, extended_gcd, multiplicative_inverse, advanceMod, advanceMod_SM
 
 # prime generation functions
 from .helpers import generate_prime_pair, miller_rabin_prime

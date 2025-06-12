@@ -1,11 +1,9 @@
-import os
 import random
 import string
 import math
 import sympy
-from typing import Union, List, Dict
-import numpy as np
-import matplotlib.pyplot as plt
+from typing import Union
+
 MAX_64BIT = 0xffffffffffffffff
 
 def hex2bin(hex_string: str) -> str:
@@ -247,26 +245,37 @@ def advanceMod_SM(a, b, c):
 
     return result
 
-def multiplicative_inverse(e, t):
-    '''
-    Calculate mul_inv of e modulo t using the Extended Euclidean Algorithm.
-    Args:
-        e (int): The number to find the inverse of.
-        t (int): The modulus.
-    Returns:
-        int: The mul_inverse of e mod t. None if not exists.
-    '''
-    # Extended Euclidean Algorithm
-    t0, t1 = 0, 1
-    r0, r1 = t, e
-    while r1 != 0:
-        q = r0 // r1
-        r0, r1 = r1, r0 - q * r1
-        t0, t1 = t1, t0 - q * t1
-    if r0 > 1:
-        return None  # No inverse
-    return t0 % t
+def extended_gcd(a, b):
+    """Extended Euclidean Algorithm
+    Returns (gcd, s, t) such that s*a + t*b = gcd(a, b)"""
+    r1, r2 = a, b
+    s1, s2 = 1, 0
+    t1, t2 = 0, 1
 
+    while (r2 > 0):
+        q = r1 // r2
+
+        r = r1 - q * r2
+        r1 = r2 ; r2 = r
+
+        s = s1 - q * s2
+        s1 = s2 ; s2 = s
+
+        t = t1 - q * t2
+        t1 = t2 ; t2 = t
+    
+    return r1, s1, t1
+
+def multiplicative_inverse(e, t):
+    """
+    Calculate modular inverse of e modulo t using extended_gcd.
+    Returns mul_inverse, None if not exist.
+    """
+    gcd, x, _ = extended_gcd(e, t)
+    if gcd != 1:
+        return None
+    else:
+        return x % t
 
 def generate_prime_pair(bit_size = 32):
     """Generate two different prime numbers of specified bit size
@@ -387,46 +396,3 @@ def unpad_data(data: bytes) -> bytes:
     """Remove padding from data."""
     padding_length = data[-1]
     return data[:-padding_length]
-
-def plot_performance_metrics(metrics: List[Dict[str, float]], algorithm_names: List[str]):
-    """Plot performance metrics for different algorithms."""
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
-    
-    # Plot encryption/decryption times
-    enc_times = [m['encryption_time'] for m in metrics]
-    dec_times = [m['decryption_time'] for m in metrics]
-    
-    x = np.arange(len(algorithm_names))
-    width = 0.35
-    
-    ax1.bar(x - width/2, enc_times, width, label='Encryption')
-    ax1.bar(x + width/2, dec_times, width, label='Decryption')
-    ax1.set_ylabel('Time (seconds)')
-    ax1.set_title('Encryption/Decryption Performance')
-    ax1.set_xticks(x)
-    ax1.set_xticklabels(algorithm_names)
-    ax1.legend()
-    
-    # Plot throughput
-    throughput = [m['throughput'] for m in metrics]
-    ax2.bar(algorithm_names, throughput)
-    ax2.set_ylabel('Throughput (bytes/second)')
-    ax2.set_title('Algorithm Throughput')
-    
-    plt.tight_layout()
-    plt.show()
-
-def save_metrics_to_file(metrics: Dict[str, float], filename: str):
-    """Save performance metrics to a file."""
-    with open(filename, 'w') as f:
-        for key, value in metrics.items():
-            f.write(f"{key}: {value}\n")
-
-def load_metrics_from_file(filename: str) -> Dict[str, float]:
-    """Load performance metrics from a file."""
-    metrics = {}
-    with open(filename, 'r') as f:
-        for line in f:
-            key, value = line.strip().split(': ')
-            metrics[key] = float(value)
-    return metrics 

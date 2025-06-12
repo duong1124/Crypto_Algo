@@ -1,47 +1,4 @@
-import random
-import hashlib
-
-def mod_inverse(a, m):
-    """
-    Find the modular multiplicative inverse of 'a' modulo 'm' using the Extended Euclidean Algorithm.
-    Returns x such that (a * x) % m == 1 or None if the inverse doesn't exist.
-    """
-    if m == 1:
-        return 0
-    
-    # Initialize the Extended Euclidean Algorithm
-    m0, a0 = m, a
-    y, x = 0, 1
-    
-    while a > 1:
-        # q is quotient
-        q = a // m
-        
-        # Update m and a
-        m, a = a % m, m
-        
-        # Update x and y
-        x, y = y, x - q * y
-    
-    # Make x positive
-    if x < 0:
-        x += m0
-        
-    return x
-
-def extended_gcd(a, b):
-    """
-    Extended Euclidean Algorithm to find gcd(a, b) and Bézout coefficients x, y
-    such that ax + by = gcd(a, b)
-    """
-    if a == 0:
-        return b, 0, 1
-    
-    gcd, x1, y1 = extended_gcd(b % a, a)
-    x = y1 - (b // a) * x1
-    y = x1
-    
-    return gcd, x, y
+from helpers import multiplicative_inverse
 
 class FieldElementGFp:
     """
@@ -82,7 +39,7 @@ class FieldElementGFp:
             raise ValueError("Cannot divide elements from different fields")
         
         # Find the modular multiplicative inverse of other
-        inverse = mod_inverse(other.value, self.prime)
+        inverse = multiplicative_inverse(other.value, self.prime)
         if inverse is None:
             raise ZeroDivisionError(f"Element {other.value} has no multiplicative inverse in GF({self.prime})")
         

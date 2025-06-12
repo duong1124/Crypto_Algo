@@ -1,5 +1,6 @@
 from utils.helpers import *
 from algorithms.base import CryptoAlgorithm
+from typing import List
 
 class RSA(CryptoAlgorithm):
     def __init__(self):

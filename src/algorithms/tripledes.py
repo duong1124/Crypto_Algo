@@ -3,6 +3,7 @@ from utils.helpers import *
 from algorithms.base import CryptoAlgorithm
 from algorithms.des import DES
 import hashlib
+
 class TripleDES(CryptoAlgorithm):
     def __init__(self):
         super().__init__()

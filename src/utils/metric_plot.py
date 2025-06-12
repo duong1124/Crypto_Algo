@@ -1,4 +1,4 @@
-from typing import Union, List, Dict
+from typing import List, Dict
 import numpy as np
 import matplotlib.pyplot as plt
 
