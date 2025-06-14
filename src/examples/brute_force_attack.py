@@ -61,19 +61,31 @@ class BruteForceAttack():
         print(f"Time taken: {end_time - start_time:.2f} seconds")
         return None
 
-    def demonstrate_brute_force(self, max_attempts: int):
+    def demonstrate_brute_force(self, max_attempts: int, plaintext: str = None, key: str = None):
         """
         Demonstrate a brute force attack on the algorithm.
+        Args:
+            max_attempts: Maximum number of attempts
+            plaintext: Optional plaintext input (if None, will use generated test case)
+            key: Optional key input (if None, will use generated test case)
         """
-        print("Generating test case...")
-        plaintext, original_key, ciphertext = self.generate_test_case()
+        print("Setting up test case...")
+        if plaintext is None or key is None:
+            print("Using generated test case...")
+            plaintext, key, ciphertext = self.generate_test_case()
+        else:
+            print("Using provided input...")
+            ciphertext = self.algo.encrypt(hex2bin(plaintext), hex2bin(key))
+
         print(f"Plaintext: {plaintext}")
-        print(f"Original Key: {original_key}")
+        print(f"Original Key: {key}")
         print(f"Ciphertext:\nAs binary: {ciphertext}\nAs hexa: {bin2hex(ciphertext)}")
+        
         print(f"\nStarting brute force attack with {max_attempts} attempts...")
         found_key = self._brute_force_attack(ciphertext, plaintext, max_attempts=max_attempts)
+        
         if found_key:
             print(f"\nSuccess! Found key: {found_key}")
-            print(f"Original key was: {original_key}")
+            print(f"Original key was: {key}")
         else:
             print("\nAttack failed to find the key within the attempt limit")

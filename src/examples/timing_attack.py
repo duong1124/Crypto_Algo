@@ -93,17 +93,30 @@ class TimingAttack:
         print(f"Time taken: {end_time - start_time:.2f} seconds")
         return None
 
-    def demonstrate_timing_attack(self, max_attempts: int = 16):
+    def demonstrate_timing_attack(self, max_attempts: int = 16, plaintext: str = None, key: str = None):
         """
         Demonstrate a timing attack on the algorithm.
+        Args:
+            max_attempts: Maximum number of characters to guess
+            plaintext: Optional plaintext input (if None, will use generated test case)
+            key: Optional key input (if None, will use generated test case)
         """
-        print("Generating test case...")
-        plaintext, original_key, ciphertext = self.generate_test_case()
+        print("Setting up test case...")
+        if plaintext is None or key is None:
+            print("Using generated test case...")
+            plaintext, original_key, ciphertext = self.generate_test_case()
+        else:
+            print("Using provided input...")
+            original_key = key
+            ciphertext = self.algo.encrypt(hex2bin(plaintext), hex2bin(key))
+
         print(f"Plaintext: {plaintext}")
         print(f"Original Key: {original_key}")
         print(f"Ciphertext:\nAs binary {ciphertext}\nAs hex {bin2hex(ciphertext)}")
+        
         print(f"\nStarting timing attack with {max_attempts} chars...")
         found_key = self._timing_attack(ciphertext, plaintext, original_key, max_attempts)
+        
         if found_key:
             print(f"\nSuccess! Found key: {found_key}")
             print(f"Original key was: {original_key}")
