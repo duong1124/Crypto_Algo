@@ -11,11 +11,11 @@ class WhirlpoolCipher(CryptoAlgorithm):
         """Encrypt a 512-bit block with Whirlpool using the given 512-bit key."""
 
         helpers = AES_Helpers(self.block_size)
-        state = plaintext[:]
+        state = bytearray(plaintext)
         round_keys = self.key_expansion(key)
 
         # Pre-round transformation
-        state = helpers.add_round_key(state, round_keys[0])
+        state = helpers.add_round_key(state, bytearray(round_keys[0]))
 
         # 10 rounds
         for round in range(1, self.rounds + 1):
@@ -26,12 +26,10 @@ class WhirlpoolCipher(CryptoAlgorithm):
 
         return state
     
+    def decrypt(self):
+        pass
+
     def key_expansion(self, key: bytearray) -> list:
-        """
-        Whirlpool key schedule: returns list of 11 round keys (K0...K10).
-        Each round key is 64 bytes.
-        RC_i: aes_64_Rcon[i-1] (i from 1 to 10)
-        """
         helpers = AES_Helpers(self.block_size)
         round_keys = [key[:]]  # K0 = input cipherkey
 
@@ -41,10 +39,11 @@ class WhirlpoolCipher(CryptoAlgorithm):
             k = helpers.shift_cols(k)
             k = helpers.mix_rows(k)
 
-            rc = bytearray(aes_64_Rcon[round - 1])  # 8 bytes
+            rc = bytearray(64)
+            rc[0:8] = aes_64_Rcon[round - 1] 
 
-            for i in range(8):
-                k[i] ^= rc[i]
+            # K[i] = K[i-1] ⊕ RC[i] ⊕ γ(K[i-1])
+            k = bytearray([k[j] ^ rc[j] for j in range(64)])
             round_keys.append(k)
 
         return round_keys

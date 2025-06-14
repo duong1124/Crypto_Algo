@@ -26,15 +26,3 @@ envs/
 
 # Debug files
 **/src/utils/test_debug.py
-
-# Test files
-**/src/tests/test_aes.py
-**/src/tests/test_ecc_.py
-**/src/tests/test_rsa.py
-**/src/tests/test_sha.py    
-
-# Algorithm files
-**/src/algorithms/sha_.py
-**/src/algorithms/rsa_.py
-**/src/algorithms/ecc_.py
-**/src/algorithms/base_.py

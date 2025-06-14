@@ -10,32 +10,34 @@ class AES_Helpers:
         
     def byte_to_state(self, block: bytearray) -> bytearray:
         """
-        Convert 16/64-byte input into 4x4/8x8 AES column/row-major state.
+        Convert 16/64-byte input into 4x4/8x8 AES column-major state.
         """
         n = 4 if not self.modified_512 else 8
         state = bytearray(n * n)
         for row in range(n):
             for col in range(n):
                 if self.modified_512:
-                    row, col = col, row
-                state[col * n + row] = block[row * n + col]
+                    # Whirlpool: row-major
+                    state[row * n + col] = block[row * n + col]
+                else:
+                    # AES: column-major
+                    state[col * n + row] = block[row * n + col]
         return state
 
     def state_to_byte(self, state: bytearray) -> bytearray:
         """
         Convert AES column/row-major state back to 16/64-byte output.
-        Args:
-            state (bytearray): 4x4/8x8 AES column/row-major state.
-        Returns:
-            bytearray: 16/64-byte output.
         """
         n = 4 if not self.modified_512 else 8
         block = bytearray(n * n)
         for row in range(n):
             for col in range(n):
                 if self.modified_512:
-                    row, col = col, row
-                block[row * n + col] = state[col * n + row]
+                    # Whirlpool: row-major
+                    block[row * n + col] = state[row * n + col]
+                else:
+                    # AES: column-major
+                    block[row * n + col] = state[col * n + row]
         return block
 
     def get_sbox_value(self, num):
@@ -143,28 +145,35 @@ class AES_Helpers:
         return state
 
     @staticmethod
-    def shift_col(state_col, nbc):
+    def shift_col(state, col_idx):
         """
-        Shift a specific column down by nbc bytes.
+        Shift a specific column (col_idx) of the 8x8 state down by col_idx bytes.
         Args:
-            state_col (bytearray): 8-byte column.
-            nbc (int): The column number (0-based).
+            state (bytearray): 64 bytes, row-major.
+            col_idx (int): The column number (0-based).
         Returns:
-            bytearray: The column after shifting.
+            bytearray: The state after shifting column col_idx.
         """
-        for _ in range(nbc):
-            tmp = state_col[56 + nbc]  # bottom element of the column
-            for row in range(7, 0, -1):
-                state_col[row * 8 + nbc] = state_col[(row - 1) * 8 + nbc]
-            state_col[nbc] = tmp
-        return state_col
+        n = 8
+        # take col_idx
+        col = [state[row * n + col_idx] for row in range(n)]
+        # shift down col_idx positions
+        shifted = [col[(row - col_idx) % n] for row in range(n)]
+        
+        for row in range(n):
+            state[row * n + col_idx] = shifted[row]
+        return state
 
     def shift_cols(self, state):
         """
         Iterate over the 8 columns and call shift_col() on each.
+        Args:
+            state (bytearray): 64 bytes, row-major.
+        Returns:
+            bytearray: The state after all columns have been shifted.
         """
-        for i in range(8):
-            state = self.shift_col(state, i)
+        for col_idx in range(8):
+            state = self.shift_col(state, col_idx)
         return state
     
     def add_round_key(self, state, round_key):
@@ -233,7 +242,8 @@ class AES_Helpers:
                 val ^= galois_multiplication_GF8(row[j], MIX_ROWS_MATRIX[i][j], modulus=0x11D) # 0x11D for AES-512
             result[i] = val
         return result
-    
+
+    '''
     def mix_rows(self, state):
         row = bytearray(8)
 
@@ -251,6 +261,15 @@ class AES_Helpers:
                 state[j * 8 + i] = row[j]
         
         return state
+    '''
+
+    def mix_rows(self, state):
+        new_state = bytearray(64)
+        for row in range(8):
+            row_bytes = state[row*8:(row+1)*8]
+            mixed = self.mix_row(row_bytes)
+            new_state[row*8:(row+1)*8] = mixed
+        return new_state
 
     @staticmethod
     def create_round_key(expanded_key, round_key_pointer):

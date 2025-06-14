@@ -1,8 +1,6 @@
 import hashlib
 import sys
 import os
-# Add the parent directory of 'src' to the Python path
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from algorithms.ecc import ECC_GFp, ECC_GF2n
 from utils.ecc_helpers import EllipticCurveGFp, EllipticCurveGF2n

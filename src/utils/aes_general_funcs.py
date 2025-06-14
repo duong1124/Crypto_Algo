@@ -108,8 +108,7 @@ aes_64_sbox = [
 
 
 aes_64_Rcon = [
-    [aes_64_sbox[i*8 : (i+1)*8]] 
-    for i in range(10)
+    aes_64_sbox[i*8:(i+1)*8] for i in range(10)
 ]
 
 

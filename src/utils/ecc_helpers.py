@@ -1,4 +1,6 @@
-from helpers import multiplicative_inverse
+from .helpers import multiplicative_inverse
+import random
+import hashlib
 
 class FieldElementGFp:
     """
